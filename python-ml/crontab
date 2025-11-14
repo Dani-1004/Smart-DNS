@@ -1,0 +1,1 @@
+59 23 * * * python /app/dns_blocker.py >> /var/log/cron.log 2>&1

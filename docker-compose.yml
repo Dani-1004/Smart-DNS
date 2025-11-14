@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  dns:
+    build: ./go-dns
+    container_name: go-dns
+    ports:
+      - "8053:8053"
+    restart: unless-stopped
+    networks:
+      - internal
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - dns
+    restart: unless-stopped
+    networks:
+      - internal
+
+  ml:
+    build: ./python-ml
+    container_name: ml-analyzer
+    volumes:
+      - ./python-ml:/app
+    depends_on:
+      - dns
+    restart: unless-stopped
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge

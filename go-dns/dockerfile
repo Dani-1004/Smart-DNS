@@ -1,0 +1,12 @@
+# Build stage
+FROM golang:1.25-alpine AS builder
+WORKDIR /app
+COPY . .
+RUN go mod tidy && go build -o dns-server .
+
+# Runtime stage
+FROM alpine:latest
+WORKDIR /app
+COPY --from=builder /app/dns-server .
+EXPOSE 8053
+CMD ["./dns-server"]
