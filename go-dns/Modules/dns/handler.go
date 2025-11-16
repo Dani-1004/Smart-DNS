@@ -14,12 +14,14 @@ type ForwardHandler struct {
 	UpstreamAddr string
 	UDPClient    *dns.Client
 	TCPClient    *dns.Client
+	LandingIP    string
 }
 
 // NewForwardHandler membuat instance baru dari ForwardHandler
-func NewForwardHandler(upstreamAddr string) *ForwardHandler {
+func NewForwardHandler(upstreamAddr string, landingIP string) *ForwardHandler {
 	return &ForwardHandler{
 		UpstreamAddr: upstreamAddr,
+		LandingIP:    landingIP,
 		// Inisialisasi client DNS dengan timeout yang lebih singkat untuk upstream
 		UDPClient: &dns.Client{
 			Timeout: 1 * time.Second,
@@ -51,7 +53,7 @@ func (h *ForwardHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 		b := new(dns.Msg)
 		b.SetReply(r)
 
-		ip := net.ParseIP("172.22.173.93") // Merefer ke IP Server yang lari ke Landing Page
+		ip := net.ParseIP(h.LandingIP) // Merefer ke IP Server yang lari ke Landing Page
 
 		aRecord := &dns.A{
 			Hdr: dns.RR_Header{

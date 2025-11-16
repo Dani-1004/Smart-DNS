@@ -1,12 +1,26 @@
-# Build stage
-FROM golang:1.25-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN go mod tidy && go build -o dns-server .
+FROM golang:1.25.4-trixie AS builder
 
-# Runtime stage
-FROM alpine:latest
 WORKDIR /app
-COPY --from=builder /app/dns-server .
-EXPOSE 8053
-CMD ["./dns-server"]
+
+# Install gcc and sqlite3 deps for CGO
+RUN apt-get update && apt-get install -y gcc libc6-dev
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+# Build with CGO enabled
+ENV CGO_ENABLED=1
+RUN go build -o smartdns .
+
+# Final stage
+FROM debian:stable-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y sqlite3 libsqlite3-0
+
+COPY --from=builder /app/smartdns /app/
+
+CMD ["./smartdns"]

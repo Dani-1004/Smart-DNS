@@ -8,9 +8,9 @@ import (
 )
 
 // StartServer memulai server DNS menggunakan miekg/dns
-func StartServer(listenAddr, upstreamAddr string) error {
+func StartServer(listenAddr, upstreamAddr, landingIP string) error {
 	// Buat handler yang akan meneruskan request
-	forwardHandler := NewForwardHandler(upstreamAddr)
+	forwardHandler := NewForwardHandler(upstreamAddr, landingIP)
 
 	// Inisialisasi server DNS (UDP)
 	server := &dns.Server{Addr: listenAddr, Net: "udp"}

@@ -10,11 +10,12 @@ import (
 
 func main() {
 	db.ConnectDatabase()
-	listenAddr := "127.0.0.1:8053"
+	listenAddr := "0.0.0.0:8053"
 	upstreamAddr := "8.8.8.8:53"
+	landingIP := "172.24.183.245"
 
 	fmt.Printf("Starting Smart DNS Server...\n")
-	if err := dns.StartServer(listenAddr, upstreamAddr); err != nil {
+	if err := dns.StartServer(listenAddr, upstreamAddr, landingIP); err != nil {
 		log.Fatalf("Failed to start DNS server: %v", err)
 	}
 }

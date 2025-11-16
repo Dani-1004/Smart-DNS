@@ -1,13 +1,23 @@
 FROM python:3.12-slim
 
 WORKDIR /app
-COPY . .
 
+# Install cron, chromium-shell, chromium-driver
+RUN apt-get update && apt-get install -y \
+    cron \
+    chromium-shell \
+    chromium-driver && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy only required files
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy crontab and set it up
-RUN apt-get update && apt-get install -y cron && \
-    crontab /app/crontab
+# Copy application code (excluding ignored directories)
+COPY . .
 
-# Start cron in foreground (so container stays alive)
+# Set crontab
+RUN crontab /app/crontab
+
+# Start cron in foreground
 CMD ["cron", "-f"]
