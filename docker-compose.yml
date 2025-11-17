@@ -5,7 +5,7 @@ services:
     build: ./go-dns
     container_name: go-dns
     ports:
-      - "8053:8053"
+      - "53:53"
     restart: unless-stopped
     networks:
       - internal
