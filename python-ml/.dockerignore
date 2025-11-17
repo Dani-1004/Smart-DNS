@@ -1,0 +1,19 @@
+# --- EXCLUDED ML FOLDERS ---
+PreTrained-20251012T082653Z-1-001/Word2vec
+testing
+pyvenv.cfg
+ml_analyzer_log.json
+
+
+# --- COMMON IGNORE ---
+__pycache__
+*.pyc
+*.pyo
+*.log
+.env
+.vscode
+.idea
+.git
+.gitignore
+Dockerfile
+docker-compose.yml

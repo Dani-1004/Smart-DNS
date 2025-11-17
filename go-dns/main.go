@@ -10,7 +10,7 @@ import (
 
 func main() {
 	db.ConnectDatabase()
-	listenAddr := "0.0.0.0:8053"
+	listenAddr := "0.0.0.0:53"
 	upstreamAddr := "8.8.8.8:53"
 	landingIP := "172.24.183.245"
 
