@@ -16,3 +16,15 @@ type DNSRecord struct {
 	CreatedAt   time.Time `gorm:"autoCreateTime" db:"created_at"`
 	UpdatedAt   time.Time `gorm:"autoUpdateTime" db:"updated_at"`
 }
+
+type DomainInfo struct {
+	Category  string `json:"category"`
+	Action    string `json:"action"`
+	UpdatedAt string `json:"updated_at"`
+}
+
+type DNSCacheRecord struct {
+	rType  string
+	rTTL   int
+	rValue string
+}

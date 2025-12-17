@@ -9,10 +9,10 @@ import (
 )
 
 func main() {
-	db.ConnectDatabase()
-	listenAddr := "0.0.0.0:8053"
-	upstreamAddr := "8.8.8.8:53"
-	landingIP := "172.24.183.245"
+	db.InitRedis()
+	listenAddr := "0.0.0.0:53"
+	upstreamAddr := "208.67.222.222:443"
+	landingIP := "172.30.182.85"
 
 	fmt.Printf("Starting Smart DNS Server...\n")
 	if err := dns.StartServer(listenAddr, upstreamAddr, landingIP); err != nil {

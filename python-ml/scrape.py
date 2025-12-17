@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import os
 
 def scrape_website(website):
     if not website.startswith("http"):
@@ -19,7 +20,7 @@ def scrape_website(website):
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.binary_location = "/usr/bin/chromium"
 
-    driver = uc.Chrome(options=options)
+    driver = uc.Chrome(options=options, version_main=142) 
 
     stealth(driver,
         languages=["en-US", "en"],

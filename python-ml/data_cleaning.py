@@ -64,22 +64,23 @@ def preprocessing(df):
 
     df_clean_false['stopwords'] = df_clean_false['normalisasi'].apply(stopwords_removal)
 
-    # Stemming
-    factory = StemmerFactory()
-    stemmer = factory.create_stemmer()
+    # # Stemming
+    # factory = StemmerFactory()
+    # stemmer = factory.create_stemmer()
 
-    def stemmed_wrapper(term):
-        return stemmer.stem(term)
+    # def stemmed_wrapper(term):
+    #     return stemmer.stem(term)
 
-    term_dict = {}
-    for document in df_clean_false['stopwords']:
-        for term in document:
-            if term not in term_dict:
-                term_dict[term] = stemmed_wrapper(term)
+    # term_dict = {}
+    # for document in df_clean_false['stopwords']:
+    #     for term in document:
+    #         if term not in term_dict:
+    #             term_dict[term] = stemmed_wrapper(term)
 
-    def get_stemmed_term(document):
-        return [term_dict[term] for term in document]
+    # def get_stemmed_term(document):
+    #     return [term_dict[term] for term in document]
 
-    df_clean_false['stemming'] = df_clean_false['stopwords'].swifter.apply(get_stemmed_term)
+    # df_clean_false['stemming'] = df_clean_false['stopwords'].swifter.apply(get_stemmed_term)
 
+    # df_clean_normal = df_clean_false['normalisasi']['Label']
     return df_clean_false

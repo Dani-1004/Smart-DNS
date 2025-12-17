@@ -1,37 +1,90 @@
 version: "3.9"
 
 services:
+  mysql:
+    image: mariadb:lts-ubi
+    container_name: smartdns-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smartdns
+    networks:
+       internal:
+         ipv4_address: 192.168.50.10
+    ports:
+      - "3306:3306"
+
   dns:
     build: ./go-dns
     container_name: go-dns
-    ports:
-      - "8053:8053"
     restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DB: smartdns
     networks:
-      - internal
-
+       internal:
+         ipv4_address: 192.168.50.11
+  
   nginx:
-    build: ./nginx
-    container_name: nginx
+    image: nginx:1-alpine
+    container_name: smartdns-nginx
+    restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/ssl
+      - ./nginx/html:/var/www/html
     depends_on:
       - dns
-    restart: unless-stopped
     networks:
-      - internal
+       internal:
+         ipv4_address: 192.168.50.12
 
   ml:
     build: ./python-ml
     container_name: ml-analyzer
+    restart: unless-stopped
     volumes:
       - ./python-ml:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DB: smartdns
     depends_on:
       - dns
-    restart: unless-stopped
+      - mysql
+      - redis
+    ports:
+      - "8000:8000"
     networks:
-      - internal
+       internal:
+         ipv4_address: 192.168.50.13
+
+  redis:
+    image: redis:alpine3.22
+    container_name: redis
+    command: ["redis-server", "--requirepass", "x"]
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+       internal:
+         ipv4_address: 192.168.50.15
 
 networks:
   internal:
-    driver: bridge
+    name: internal
+    driver: bridge  
+    ipam:
+      config:
+        - subnet: "192.168.50.0/24"
+          ip_range: "192.168.50.0/26"
+          gateway: "192.168.50.1"
