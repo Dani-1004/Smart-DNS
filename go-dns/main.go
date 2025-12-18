@@ -12,7 +12,7 @@ func main() {
 	db.InitRedis()
 	listenAddr := "0.0.0.0:53"
 	upstreamAddr := "208.67.222.222:443"
-	landingIP := "172.30.182.85"
+	landingIP := "192.168.1.3"
 
 	fmt.Printf("Starting Smart DNS Server...\n")
 	if err := dns.StartServer(listenAddr, upstreamAddr, landingIP); err != nil {

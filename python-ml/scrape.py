@@ -20,7 +20,7 @@ def scrape_website(website):
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.binary_location = "/usr/bin/chromium"
 
-    driver = uc.Chrome(options=options, version_main=142) 
+    driver = uc.Chrome(options=options, version_main=143) 
 
     stealth(driver,
         languages=["en-US", "en"],

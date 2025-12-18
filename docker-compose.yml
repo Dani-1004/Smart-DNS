@@ -15,7 +15,7 @@ services:
       - "3306:3306"
 
   dns:
-    build: ./go-dns
+    image: danih229/smart-dns-dns:latest
     container_name: go-dns
     restart: unless-stopped
     ports:
@@ -48,7 +48,7 @@ services:
          ipv4_address: 192.168.50.12
 
   ml:
-    build: ./python-ml
+    image: danih229/smart-dns-ml:latest
     container_name: ml-analyzer
     restart: unless-stopped
     volumes:
